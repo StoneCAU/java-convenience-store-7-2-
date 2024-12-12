@@ -50,4 +50,8 @@ public class Orders {
     public int getTotalPayment() {
         return getTotalPrice() - getPromotionDiscount() - getMembershipDiscount();
     }
+
+    public void updateQuantity() {
+        orders.forEach(Order::update);
+    }
 }

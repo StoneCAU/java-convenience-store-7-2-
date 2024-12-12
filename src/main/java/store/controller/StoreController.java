@@ -12,10 +12,14 @@ import store.view.OutputView;
 
 public class StoreController {
     public void run() {
-        OutputView.printWelcomeMessage();
+        String reply;
         Products products = FileLoader.getProducts();
-        OutputView.printProducts(products);
-        buy(products);
+        do {
+            OutputView.printWelcomeMessage();
+            OutputView.printProducts(products);
+            buy(products);
+            reply = InputView.inputRetry();
+        } while (!reply.equals("N"));
     }
 
     private void buy(Products products) {
@@ -95,5 +99,6 @@ public class StoreController {
 
     private void getResults(Orders orders) {
         OutputView.printResults(orders);
+        orders.updateQuantity();
     }
 }

@@ -15,7 +15,7 @@ public class Order {
     public Order(List<Product> products, int quantity) {
         this.products = products;
         this.quantity = quantity;
-        this.addedQuantity = 0;
+        this.addedQuantity = calculateAddedQuantity();
         validate();
         checkPromotionDate();
     }
@@ -28,12 +28,33 @@ public class Order {
         return quantity;
     }
 
-    public int getAddedQuantity() {
-        return addedQuantity;
+    public void update() {
+        if (products.size() == 2) {
+            updatePromotionAndNormalProduct();
+            return;
+        }
+        updateOnlyNormalProduct();
     }
 
-    public boolean isPromotion() {
-        return isPromotion;
+    private void updateOnlyNormalProduct() {
+        Product normalProduct = products.get(0);
+        normalProduct.setQuantity(normalProduct.getQuantity() - quantity);
+    }
+
+    private void updatePromotionAndNormalProduct() {
+        Product promotionProduct = products.get(0);
+        Product normalProduct = products.get(1);
+
+        if (promotionProduct.getQuantity() < quantity) {
+            normalProduct.setQuantity(normalProduct.getQuantity() - (quantity - promotionProduct.getQuantity()));
+            promotionProduct.setQuantity(0);
+            return;
+        }
+        promotionProduct.setQuantity(promotionProduct.getQuantity() - quantity);
+    }
+
+    public int getAddedQuantity() {
+        return addedQuantity;
     }
 
     public boolean hasAddedQuantity() {
@@ -103,6 +124,19 @@ public class Order {
     private boolean isPromotionDate(LocalDate now) {
         Promotion promotion = products.getFirst().getPromotion();
         return now.isBefore(promotion.getEndDate()) && now.isAfter(promotion.getStartDate());
+    }
+
+    private int calculateAddedQuantity() {
+        Promotion promotion = products.getFirst().getPromotion();
+        if (promotion != null) {
+            return getShareQuantity() / (promotion.getBuy() + promotion.getGet());
+        }
+        return 0;
+    }
+
+    private int getShareQuantity() {
+        if (products.getFirst().getQuantity() <= quantity) return  products.getFirst().getQuantity();
+        return quantity;
     }
 
     @Override

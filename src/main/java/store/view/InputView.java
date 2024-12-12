@@ -31,6 +31,12 @@ public class InputView {
         return inputString();
     }
 
+    public static String inputRetry() {
+        printNewLine();
+        System.out.println("감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)");
+        return inputString();
+    }
+
     private static void printNewLine() {
         System.out.printf(NEW_LINE);
     }
