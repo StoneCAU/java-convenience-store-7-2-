@@ -22,18 +22,18 @@ public class Products {
         return promotions;
     }
 
+    public List<Product> getAllKindsOfProductsByName(String name) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .toList();
+    }
+
     private Product getPromotionProductByName(String name) {
         return products.stream()
                 .filter(product -> product.getName().equals(name))
                 .filter(product -> product.getPromotion() != null)
                 .findFirst()
                 .orElseThrow(() -> new StoreException(ErrorMessage.INVALID_FILE_CONTENT));
-    }
-
-    private List<Product> getAllKindsOfProductsByName(String name) {
-        return products.stream()
-                .filter(product -> product.getName().equals(name))
-                .toList();
     }
 
     private void addOutOfStockProducts() {
