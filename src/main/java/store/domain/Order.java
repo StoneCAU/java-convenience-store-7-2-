@@ -41,9 +41,28 @@ public class Order {
         addedQuantity++;
     }
 
+    public void subtractQuantity() {
+        quantity -= getNotApplicableQuantity();
+    }
+
     public boolean isAddable() {
         Promotion promotion = products.getFirst().getPromotion();
-        return (quantity + 1) % (promotion.getGet() + promotion.getBuy()) == 0 && isPromotion;
+        return (quantity + 1) % (promotion.getGet() + promotion.getBuy()) == 0
+                && isPromotion
+                && quantity <= products.getFirst().getQuantity();
+    }
+
+    public boolean hasNotApplicable() {
+        int promotionQuantity = products.getFirst().getQuantity();
+        Promotion promotion = products.getFirst().getPromotion();
+        return promotionQuantity - (promotionQuantity % (promotion.getBuy() + promotion.getGet())) < quantity
+                && isPromotion;
+    }
+
+    public int getNotApplicableQuantity() {
+        int promotionQuantity = products.getFirst().getQuantity();
+        Promotion promotion = products.getFirst().getPromotion();
+        return quantity - (promotionQuantity - (promotionQuantity % (promotion.getBuy() + promotion.getGet())));
     }
 
     private void validate() {
