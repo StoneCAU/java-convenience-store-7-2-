@@ -25,6 +25,12 @@ public class InputView {
         return inputString();
     }
 
+    public static String inputMembership() {
+        printNewLine();
+        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        return inputString();
+    }
+
     private static void printNewLine() {
         System.out.printf(NEW_LINE);
     }

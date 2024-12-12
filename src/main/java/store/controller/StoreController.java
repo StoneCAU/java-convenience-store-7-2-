@@ -22,6 +22,8 @@ public class StoreController {
         Orders orders = makeOrder(products);
         selectAddOrNot(orders);
         selectBuyOrNot(orders);
+        selectMembershipOrNot(orders);
+        getResults(orders);
     }
 
     private Orders makeOrder(Products products) {
@@ -73,5 +75,25 @@ public class StoreController {
                 OutputView.printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    private void selectMembershipOrNot(Orders orders) {
+        String reply = membershipOrNot();
+        if (reply.equals("Y")) orders.applyMembership();
+    }
+
+    private String membershipOrNot() {
+        while (true) {
+            try {
+                String input = InputView.inputMembership();
+                return InputValidator.getReply(input);
+            } catch (StoreException e) {
+                OutputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private void getResults(Orders orders) {
+        OutputView.printResults(orders);
     }
 }
