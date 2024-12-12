@@ -2,6 +2,7 @@ package store.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import store.domain.Order;
 import store.domain.Orders;
 import store.domain.Product;
@@ -33,11 +34,15 @@ public class InputValidator {
                     List<Product> productList = getProductList(info.getFirst(), products);
                     int quantity = parseNumber(info.get(1));
                     return new Order(productList, quantity);
-                }).toList();
+                }).collect(Collectors.toList());
     }
 
     private static List<String> parseOrderInfo(String orderLine) {
-        return Arrays.stream(orderLine.split("-")).toList();
+        List<String> info = Arrays.stream(orderLine.split("-")).toList();
+        if (info.size() != 2) {
+            throw new StoreException(ErrorMessage.INVALID_ORDER);
+        }
+        return info;
     }
 
     private static List<String> parseOrderLine(String input) {

@@ -47,6 +47,7 @@ public class Order {
 
     public boolean isAddable() {
         Promotion promotion = products.getFirst().getPromotion();
+        if (promotion == null) return false;
         return (quantity + 1) % (promotion.getGet() + promotion.getBuy()) == 0
                 && isPromotion
                 && quantity <= products.getFirst().getQuantity();
@@ -55,6 +56,7 @@ public class Order {
     public boolean hasNotApplicable() {
         int promotionQuantity = products.getFirst().getQuantity();
         Promotion promotion = products.getFirst().getPromotion();
+        if (promotion == null) return false;
         return promotionQuantity - (promotionQuantity % (promotion.getBuy() + promotion.getGet())) < quantity
                 && isPromotion;
     }
@@ -79,7 +81,7 @@ public class Order {
 
     private void checkPromotionDate() {
         LocalDate now = DateTimes.now().toLocalDate();
-        if (isPromotionDate(now)) {
+        if (products.getFirst().getPromotion() != null && isPromotionDate(now)) {
             isPromotion = true;
             return;
         }
