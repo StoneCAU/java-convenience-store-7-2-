@@ -21,6 +21,7 @@ public class StoreController {
     private void buy(Products products) {
         Orders orders = makeOrder(products);
         selectAddOrNot(orders);
+        selectBuyOrNot(orders);
     }
 
     private Orders makeOrder(Products products) {
@@ -47,6 +48,26 @@ public class StoreController {
         while (true) {
             try {
                 String input = InputView.inputAddOrNot(product);
+                return InputValidator.getReply(input);
+            } catch (StoreException e) {
+                OutputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private void selectBuyOrNot(Orders orders) {
+        orders.getOrders().stream()
+                .filter(Order::hasNotApplicable)
+                .forEach(order -> {
+                    String reply = buyOrNot(order);
+                    if (reply.equals("N")) order.subtractQuantity();
+                });
+    }
+
+    private String buyOrNot(Order order) {
+        while (true) {
+            try {
+                String input = InputView.inputBuyOrNot(order);
                 return InputValidator.getReply(input);
             } catch (StoreException e) {
                 OutputView.printErrorMessage(e.getMessage());
