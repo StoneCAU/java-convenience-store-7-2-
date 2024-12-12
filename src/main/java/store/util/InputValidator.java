@@ -16,6 +16,14 @@ public class InputValidator {
         return new Orders(orderList);
     }
 
+    public static String getReply(String input) {
+        if (!input.equals("Y") && !input.equals("N")) {
+            throw new StoreException(ErrorMessage.INVALID_INPUT);
+        }
+
+        return input;
+    }
+
     private static List<Order> generateOrderList(String input, Products products) {
         List<String> orderLine = parseOrderLine(input);
 
