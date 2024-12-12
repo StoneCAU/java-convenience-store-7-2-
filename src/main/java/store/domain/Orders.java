@@ -12,4 +12,8 @@ public class Orders {
     public List<Order> getOrders() {
         return orders;
     }
+
+    public void checkAddable() {
+
+    }
 }
