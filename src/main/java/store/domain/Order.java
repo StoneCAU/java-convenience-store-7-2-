@@ -36,6 +36,10 @@ public class Order {
         return isPromotion;
     }
 
+    public boolean hasAddedQuantity() {
+        return addedQuantity > 0;
+    }
+
     public void addQuantity() {
         quantity++;
         addedQuantity++;
@@ -43,6 +47,14 @@ public class Order {
 
     public void subtractQuantity() {
         quantity -= getNotApplicableQuantity();
+    }
+
+    public int getTotalAmount() {
+        return quantity * products.getFirst().getPrice();
+    }
+
+    public int getPromotionAmount() {
+        return getAddedQuantity() * products.getFirst().getPrice();
     }
 
     public boolean isAddable() {
@@ -91,5 +103,10 @@ public class Order {
     private boolean isPromotionDate(LocalDate now) {
         Promotion promotion = products.getFirst().getPromotion();
         return now.isBefore(promotion.getEndDate()) && now.isAfter(promotion.getStartDate());
+    }
+
+    @Override
+    public String toString() {
+        return products.getFirst().getName() + "\t\t\t" + quantity + "\t\t" + String.format("%,d", products.getFirst().getPrice() * quantity);
     }
 }
