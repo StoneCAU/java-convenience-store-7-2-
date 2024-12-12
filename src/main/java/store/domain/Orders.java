@@ -42,6 +42,7 @@ public class Orders {
     }
 
     public int getMembershipDiscount() {
+        if (!isMembership) return 0;
         if ((int) ((getTotalPrice() - getPromotionDiscount()) * 0.3) >= 8000) return 8000;
         return (int) ((getTotalPrice() - getPromotionDiscount()) * 0.3);
     }
